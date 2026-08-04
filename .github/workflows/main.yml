@@ -1,0 +1,44 @@
+name: CI - PPP Mentoria 2026
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      PORT: 3000
+
+    steps:
+
+      # Clone do projeto
+      - name: Clone do projeto
+        uses: actions/checkout@v4
+
+      # Configuração do Node.js
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Instalação das dependências
+      - name: Instalar dependências do projeto
+        run: npm install
+
+      # Inicialização da aplicação
+      - name: Iniciando servidor da aplicação
+        run: npm start &
+
+      # Aguarda o servidor subir
+      - name: Aguardando aplicação iniciar
+        run: sleep 10
+
+      # Validação da API
+      - name: Validando Swagger
+        run: curl http://localhost:3000/docs
+
+      # Finalização
+      - name: Pipeline finalizada
+        run: echo "Pipeline executada com sucesso!"
